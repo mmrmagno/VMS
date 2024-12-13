@@ -1,0 +1,345 @@
+# static/css/styles.css
+:root {
+  --primary-color: #5C6BC0;
+  --primary-light: #8E99F3;
+  --primary-dark: #26418F;
+  --success-color: #66BB6A;
+  --danger-color: #EF5350;
+  --background-color: #F5F7FA;
+  --card-background: #FFFFFF;
+  --text-primary: #2C3E50;
+  --text-secondary: #546E7A;
+  --border-color: #E3E8EF;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
+  --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Modern Header */
+.header {
+  background: var(--gradient-primary);
+  padding: 1rem;
+  color: white;
+  box-shadow: var(--shadow-lg);
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: white;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Enhanced Form Styles */
+.form-container {
+  background: var(--card-background);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+  max-width: 600px;
+  margin: 2rem auto;
+  transform: translateY(0);
+  transition: transform 0.3s ease;
+}
+
+.form-container:hover {
+  transform: translateY(-5px);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background: #F8FAFC;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  background: white;
+  box-shadow: 0 0 0 4px rgba(92,107,192,0.1);
+}
+
+/* Enhanced Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 24px;
+  background: var(--gradient-primary);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  gap: 0.5rem;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid white;
+}
+
+/* Modern Swipe Checkout */
+.swipe-container {
+  position: relative;
+  background: #E3E8EF;
+  height: 70px;
+  border-radius: 35px;
+  margin: 20px 0;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.swipe-track {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  background: linear-gradient(90deg, var(--success-color) 0%, var(--success-color) 50%, transparent 50%);
+  border-radius: 30px;
+  opacity: 0.2;
+}
+
+.swipe-button {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-radius: 30px;
+  background: white;
+  left: 5px;
+  top: 5px;
+  cursor: grab;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  transition: transform 0.2s ease;
+  z-index: 2;
+}
+
+.swipe-button:active {
+  cursor: grabbing;
+  background: #f8f9fa;
+}
+
+.swipe-text {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+  line-height: 70px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  user-select: none;
+  z-index: 1;
+}
+
+/* Enhanced Admin Dashboard */
+.admin-dashboard {
+  background: var(--card-background);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+.table th,
+.table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color);
+  text-align: left;
+}
+
+.table th {
+  background: #F8FAFC;
+  font-weight: 600;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 0.5px;
+}
+
+.table tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+  background-color: #F8FAFC;
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  gap: 0.5rem;
+}
+
+.status-active {
+  background: #E8F5E9;
+  color: #2E7D32;
+}
+
+.status-checked-out {
+  background: #ECEFF1;
+  color: #455A64;
+}
+
+/* Action Buttons */
+.action-btn {
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+}
+
+.action-btn-danger {
+  background: #FFEBEE;
+  color: var(--danger-color);
+}
+
+.action-btn-danger:hover {
+  background: #FFCDD2;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid white;
+    color: white !important;
+}
+
+.btn-outline:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.header .nav-buttons a {
+    color: white;
+    text-decoration: none;
+}
+
+.header .btn {
+    color: white;
+    margin-left: 1rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-weight: 500;
+}
+
+.alert-error {
+    background: #FFEBEE;
+    color: #C62828;
+    border: 1px solid #FFCDD2;
+}
+
+/* Login form specific styles */
+.form-container {
+    max-width: 400px;
+    margin: 2rem auto;
+}
+
+.form-container h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    color: var(--text-primary);
+}
+
+.form-container .btn {
+    width: 100%;
+}

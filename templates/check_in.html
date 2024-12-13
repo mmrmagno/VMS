@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Visitor Check-in{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Visitor Check-in</h2>
+    <form action="/check-in" method="post">
+        <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+        <div class="form-group">
+            <label for="host_name">Host Name</label>
+            <input type="text" class="form-control" id="host_name" name="host_name" required>
+        </div>
+        <div class="form-group">
+            <label for="reason">Reason for Visit</label>
+            <textarea class="form-control" id="reason" name="reason" required></textarea>
+        </div>
+        <button type="submit" class="btn">Check In</button>
+    </form>
+</div>
+{% endblock %}

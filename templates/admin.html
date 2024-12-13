@@ -1,0 +1,132 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block extra_head %}
+<script>
+function refreshData() {
+    location.reload();
+}
+
+function adminCheckout(visitorId) {
+    if (confirm('Are you sure you want to override checkout for this visitor?')) {
+        fetch(`/admin-checkout/${visitorId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred during checkout');
+        });
+    }
+}
+
+function filterTable() {
+    const input = document.getElementById('searchInput');
+    const filter = input.value.toLowerCase();
+    const tbody = document.querySelector('.table tbody');
+    const rows = tbody.getElementsByTagName('tr');
+
+    for (let row of rows) {
+        const name = row.getElementsByTagName('td')[0].textContent.toLowerCase();
+        const host = row.getElementsByTagName('td')[1].textContent.toLowerCase();
+        row.style.display = 
+            name.includes(filter) || host.includes(filter) ? '' : 'none';
+    }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="admin-dashboard">
+    <div class="admin-header">
+        <h2>Visitor Management Dashboard</h2>
+        <div class="admin-actions">
+            <input type="text" 
+                   id="searchInput" 
+                   class="form-control" 
+                   placeholder="Search by name or host..." 
+                   onkeyup="filterTable()"
+                   style="display: inline-block; width: 250px; margin-right: 1rem;">
+            <button class="btn" onclick="refreshData()">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15">
+                    </path>
+                </svg>
+                Refresh
+            </button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Host</th>
+                    <th>Reason</th>
+                    <th>Check-in Time</th>
+                    <th>Check-out Time</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for visitor in visitors %}
+                <tr>
+                    <td>{{ visitor.name }}</td>
+                    <td>{{ visitor.host_name }}</td>
+                    <td>{{ visitor.reason }}</td>
+                    <td>{{ visitor.check_in_time.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+                    <td>
+                        {% if visitor.check_out_time %}
+                            {{ visitor.check_out_time.strftime('%Y-%m-%d %H:%M:%S') }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>
+                        <span class="status-badge {% if visitor.is_checked_out %}status-checked-out{% else %}status-active{% endif %}">
+                            {% if visitor.is_checked_out %}
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Checked Out
+                            {% else %}
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                                Active
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        {% if not visitor.is_checked_out %}
+                            <button class="action-btn action-btn-danger" 
+                                    onclick="adminCheckout({{ visitor.id }})"
+                                    title="Admin Override Checkout">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                                          d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                                    </path>
+                                </svg>
+                                Override Checkout
+                            </button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

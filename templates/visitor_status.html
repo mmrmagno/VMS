@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block title %}Visitor Status{% endblock %}
+
+{% block extra_head %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const swipeButton = document.querySelector('.swipe-button');
+    const swipeContainer = document.querySelector('.swipe-container');
+    let isDragging = false;
+    let startX, currentX;
+    
+    function handleStart(e) {
+        isDragging = true;
+        startX = (e.type === 'mousedown') ? e.pageX : e.touches[0].pageX;
+        currentX = swipeButton.offsetLeft;
+        swipeButton.style.transition = 'none';
+    }
+    
+    function handleMove(e) {
+        if (!isDragging) return;
+        e.preventDefault();
+        
+        const x = (e.type === 'mousemove') ? e.pageX : e.touches[0].pageX;
+        const walk = x - startX;
+        const newPosition = currentX + walk;
+        const maxX = swipeContainer.offsetWidth - swipeButton.offsetWidth - 10;
+        
+        let position = Math.max(5, Math.min(newPosition, maxX));
+        swipeButton.style.left = position + 'px';
+        
+        if (position >= maxX * 0.9) {
+            checkOut();
+            isDragging = false;
+        }
+    }
+    
+    function handleEnd() {
+        if (!isDragging) return;
+        isDragging = false;
+        
+        swipeButton.style.transition = 'left 0.3s ease';
+        swipeButton.style.left = '5px';
+    }
+    
+    // Mouse Events
+    swipeButton.addEventListener('mousedown', handleStart);
+    document.addEventListener('mousemove', handleMove);
+    document.addEventListener('mouseup', handleEnd);
+    
+    // Touch Events
+    swipeButton.addEventListener('touchstart', handleStart);
+    document.addEventListener('touchmove', handleMove, { passive: false });
+    document.addEventListener('touchend', handleEnd);
+});
+
+function checkOut() {
+    fetch(`/check-out/{{ visitor.id }}`, {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        location.reload();
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Welcome, {{ visitor.name }}!</h2>
+    <div class="info-group">
+        <label>Host</label>
+        <p>{{ visitor.host_name }}</p>
+    </div>
+    <div class="info-group">
+        <label>Check-in Time</label>
+        <p>{{ visitor.check_in_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+    </div>
+    
+    {% if visitor.is_checked_out %}
+        <div class="info-group">
+            <label>Check-out Time</label>
+            <p>{{ visitor.check_out_time.strftime('%Y-%m-%d %H:%M:%S') }}</p>
+        </div>
+        <div class="status-badge status-checked-out">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            Checked Out
+        </div>
+    {% else %}
+        <div class="swipe-container">
+            <div class="swipe-track"></div>
+            <div class="swipe-text">Swipe to check out →</div>
+            <div class="swipe-button">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
